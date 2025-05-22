@@ -1,0 +1,45 @@
+services:
+  nginx:
+    image: nginx
+    build: ./requirements/nginx
+    container_name: nginx-c
+    env_file:      
+      - .env
+    # networks:
+    #   - container-net
+    ports:
+      - 8080:443
+    volumes:
+      - ./web:/var/www/html
+
+  # mariadb:
+  #   image: mariadb
+  #   build: ./requirements/mariadb
+  #   container_name: mariadb-c
+  #   env_file:      
+  #       - .env
+  #   # volumes:
+  #   #   - maria:/etc/data
+  #   # networks:
+  #   #   - container-net
+  #   depends_on:             
+  #       - nginx
+
+  wordpress:
+    image: wordpress
+    build: ./requirements/wordpress
+    container_name: wordpress-c
+    volumes:
+      - ./web:/var/www/html
+    # networks:
+    #   - container-net
+    # depends_on:             
+    #     - mariadb
+
+# volumes:
+#   maria:
+
+#   wp:
+
+# networks:
+#   container-net:
