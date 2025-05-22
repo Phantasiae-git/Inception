@@ -2,14 +2,12 @@ FROM debian:oldstable
 
 RUN su -
 
-RUN apt-get update -y
+RUN apt-get update -y && apt-get upgrade -y
 
 RUN apt-get install sudo -y
 
-RUN sudo apt update -y && sudo apt upgrade -y
+RUN sudo apt-get install nginx -y
 
-RUN sudo apt install nginx -y
-
-COPY default /etc/nginx/sites-available/.
+COPY ./conf/nginx.conf /etc/nginx/sites-available/default
 
 ENTRYPOINT ["nginx", "-g", "daemon off;"]

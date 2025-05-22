@@ -8,22 +8,20 @@ services:
     # networks:
     #   - container-net
     ports:
-      - 8080:443
+      - 80:80
     volumes:
       - ./web:/var/www/html
 
-  # mariadb:
-  #   image: mariadb
-  #   build: ./requirements/mariadb
-  #   container_name: mariadb-c
-  #   env_file:      
-  #       - .env
-  #   # volumes:
-  #   #   - maria:/etc/data
-  #   # networks:
-  #   #   - container-net
-  #   depends_on:             
-  #       - nginx
+  mariadb:
+    image: mariadb
+    build: ./requirements/mariadb
+    container_name: mariadb-c
+    env_file:      
+        - .env
+    # volumes:
+    #   - maria:/etc/data
+    # networks:
+    #   - container-net
 
   wordpress:
     image: wordpress
