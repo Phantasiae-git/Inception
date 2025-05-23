@@ -1,45 +1,64 @@
 services:
   nginx:
-    image: nginx
+    image: nginx:v1.0
     build: ./requirements/nginx
     container_name: nginx-c
     env_file:      
       - .env
-    # networks:
-    #   - container-net
+    restart: on-failure
+    networks:
+      - inception
     ports:
-      - 80:80
+      - 443:443
     volumes:
-      - ./web:/var/www/html
+      - web:/var/www/html
     depends_on:             
         - wordpress
 
   mariadb:
-    image: mariadb
+    image: mariadb:v1.0
     build: ./requirements/mariadb
     container_name: mariadb-c
     env_file:      
         - .env
     # volumes:
     #   - maria:/etc/data
-    # networks:
-    #   - container-net
+    restart: on-failure
+    networks:
+      - inception
+    expose:
+        - "3306"
+    volumes:
+      - db:/var/lib/mysql
 
   wordpress:
-    image: wordpress
+    image: wordpress:v1.0
     build: ./requirements/wordpress
     container_name: wordpress-c
     volumes:
-      - ./web:/var/www/html
-    # networks:
-    #   - container-net
+      - web:/var/www/html
+    networks:
+      - inception
+    restart: on-failure
     depends_on:             
         - mariadb
+    expose:
+        - "9000"
 
-# volumes:
-#   maria:
+volumes:
+  web:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /home/rfontes-/data/wordpress
+  db:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /home/rfontes-/data/mariadb
 
-#   wp:
-
-# networks:
-#   container-net:
+networks:
+  inception:
+    driver: bridge
