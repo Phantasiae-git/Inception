@@ -4,7 +4,7 @@ services:
     build: ./requirements/nginx
     container_name: nginx-c
     env_file:      
-      - .env
+        - .env
     restart: on-failure
     networks:
       - inception
@@ -21,8 +21,6 @@ services:
     container_name: mariadb-c
     env_file:      
         - .env
-    # volumes:
-    #   - maria:/etc/data
     restart: on-failure
     networks:
       - inception
@@ -35,6 +33,8 @@ services:
     image: wordpress:v1.0
     build: ./requirements/wordpress
     container_name: wordpress-c
+    env_file:      
+        - .env
     volumes:
       - web:/var/www/html
     networks:

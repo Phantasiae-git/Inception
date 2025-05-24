@@ -10,8 +10,12 @@ RUN sudo apt-get install mariadb-server -y
 
 COPY ./conf/50-server.cnf /etc/mysql/mariadb.conf.d/.
 
-COPY ./tools/init.sql /etc/mysql/init.sql
+# COPY ./tools/init.sql /etc/mysql/init.sql
 
 RUN mkdir /run/mysqld
 
-ENTRYPOINT ["mysqld_safe"]
+COPY ./tools/mariadb.sh .
+
+RUN chmod +x mariadb.sh
+
+ENTRYPOINT ["./mariadb.sh"]
