@@ -1,7 +1,12 @@
 #!/bin/bash
-echo "CREATE DATABASE ${DB_NAME};" > /etc/mysql/init.sql
-echo "CREATE USER '${DB_USER}'@'%' IDENTIFIED BY '${DB_PASSWORD}';" >> /etc/mysql/init.sql
-echo "GRANT ALL PRIVILEGES ON *.* TO '${DB_USER}'@'%';" >> /etc/mysql/init.sql
-echo "FLUSH PRIVILEGES;" >> /etc/mysql/init.sql
-sleep 5
+cat > /etc/mysql/init.sql <<EOF
+ALTER USER 'root'@'localhost' IDENTIFIED BY '${DB_ROOT_PASSWORD}';
+CREATE DATABASE IF NOT EXISTS ${DB_NAME};
+CREATE USER IF NOT EXISTS '${DB_USER}'@'%' IDENTIFIED BY '${DB_PASSWORD}';
+GRANT ALL PRIVILEGES ON ${DB_NAME}.* TO '${DB_USER}'@'%';
+DELETE FROM mysql.user WHERE User='';
+DROP DATABASE IF EXISTS test;
+FLUSH PRIVILEGES;
+EOF
+
 mysqld_safe
